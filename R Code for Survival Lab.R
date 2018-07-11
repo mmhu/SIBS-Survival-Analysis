@@ -5,7 +5,7 @@
 library(survival)
 
 ###Load data into R dataset called AIDS 
-AIDS=read.table("AIDS.DAT", col.names = c("Survival in months", "Censored", "AgeGroup"))
+AIDS <- read.table("AIDS.DAT", col.names = c("Survival in months", "Censored", "AgeGroup"))
 
 ##Use the summary function to get an idea of what is contained in this dataset
 summary(AIDS)
@@ -43,19 +43,18 @@ survdiff(surv.time ~ AIDS$AgeGroup)
 library(readxl)
 
 ###Load aids2 dataset
-AIDS2 <- read_xlsx("S:/course/SIBS/data sets/aids2.xlsx",sheetIndex = 1)
+AIDS2 <- read_xlsx("aids2.xlsx", sheet = 1)
 
 ##Fit a Cox Proportional Hazard Model with new dataset which includes gender variable
-Model1=coxph(Surv.time~AgeGroup+gender, data=AIDS2)
-
+model1 <- coxph(surv.time ~ agecat + gender, data = AIDS2)
 
 #obtain Shcoenfeld residuals for the PH model
-SchResids=residuals(Model1,type="schoenfeld")
+sch.resids <- residuals(model1, type = "schoenfeld")
 
 ##Create a dataset that contains Schoenfeld residuals, survival times, and the ranks of those times
-ranked=cbind(Surivival.in.months.[which(Censored==1)],SchResids,
-             rank(Surivival.in.months.[which(Censored==1)]))
+ranked <- cbind(AIDS$Survival.in.months[which(AIDS$Censored == 1)], sch.resids,
+             rank(AIDS$Survival.in.months[which(AIDS$Censored == 1)]))
 
 ##Test whether Ranks of survival times are corrrelated with Schoenfeld residuals
-cor.test(ranked[,2],ranked[,4])
-cor.test(ranked[,3],ranked[,4])
+cor.test(ranked[, 2], ranked[, 4])
+cor.test(ranked[, 3], ranked[, 4])
