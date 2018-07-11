@@ -52,8 +52,8 @@ model1 <- coxph(surv.time ~ agecat + gender, data = AIDS2)
 sch.resids <- residuals(model1, type = "schoenfeld")
 
 ##Create a dataset that contains Schoenfeld residuals, survival times, and the ranks of those times
-ranked <- cbind(AIDS$Survival.in.months[which(AIDS$Censored == 1)], sch.resids,
-             rank(AIDS$Survival.in.months[which(AIDS$Censored == 1)]))
+ranked <- cbind(AIDS$Survival.in.months[which(AIDS$Censored == 1)], sch.resids, 
+                rank(AIDS$Survival.in.months[which(AIDS$Censored == 1)]))
 
 ##Test whether Ranks of survival times are corrrelated with Schoenfeld residuals
 cor.test(ranked[, 2], ranked[, 4])
