@@ -1,12 +1,11 @@
 ##Install the 'survival package'
-install.packages("survival")
+# install.packages("survival")
 
 ##Load the package
 library(survival)
 
 ###Load data into R dataset called AIDS 
-AIDS=read.table("S:/course/SIBS/data sets/AIDS.DAT",col.names = c("Surivival(in months)",
-                                                                  "Censored","AgeGroup"))
+AIDS=read.table("AIDS.DAT", col.names = c("Survival in months", "Censored", "AgeGroup"))
 
 ##Use the summary function to get an idea of what is contained in this dataset
 summary(AIDS)
@@ -15,7 +14,7 @@ summary(AIDS)
 attach(AIDS)
 
 ##Examine the distribution of the survival time
-hist(Surivial.in.months.)
+hist(Survival.in.months)
 
 ##Examine counts of censored obs and age groups
 table(Censored)
@@ -23,28 +22,28 @@ table(AgeGroup)
 
 ##In order to use the package we need to create a variable that incorporates 
 ##time and censoring
-Surv.time=Surv(Surivival.in.months.,Censored)
+surv.time <- Surv(AIDS$Survival.in.months, AIDS$Censored)
 
 ###Construct Kaplan-Meier Plots  
 ### The first item is a list and contains 14 outputs from the model                              
-Curve=survfit(Surv.time~AgeGroup)  #survfit function calculates values for curve
-plot(Curve,col = c(2,3))           #then plot function makes the graph
+curve <- survfit(surv.time ~ AIDS$AgeGroup)  #survfit function calculates values for curve
+plot(curve, col = c(2,3))           #then plot function makes the graph
 
 ##Examine some of the model output
-summary(Curve)   #Shows the risk of survival within each group and particular times
-quantile(Curve)  ##Shows the quantiles along with a confidence interval for each
+summary(curve)   #Shows the risk of survival within each group and particular times
+quantile(curve)  ##Shows the quantiles along with a confidence interval for each
 
 ##Conduct statistical test of difference in KM curves
-survdiff(Surv.time~AgeGroup)
+survdiff(surv.time ~ AIDS$AgeGroup)
 
 #Install package to ease import of Excel files
-install.packages("readxl")
+# install.packages("readxl")
 
 ##Load package to ease import of Excel files
 library(readxl)
 
 ###Load aids2 dataset
-AIDS2=read_xlsx("S:/course/SIBS/data sets/aids2.xlsx",sheetIndex = 1)
+AIDS2 <- read_xlsx("S:/course/SIBS/data sets/aids2.xlsx",sheetIndex = 1)
 
 ##Fit a Cox Proportional Hazard Model with new dataset which includes gender variable
 Model1=coxph(Surv.time~AgeGroup+gender, data=AIDS2)
